@@ -55,9 +55,6 @@ userSchema.pre('save', function(next){
 userSchema.methods.comparePassword = function(plainPassword, cb){
     
     bcrypt.compare(plainPassword, this.password, function(err, isMatch){
-        let user = this;
-    console.log('a', user.password, isMatch)
-
         if(err) return cb(err);
         cb(null, isMatch);  
     })
@@ -92,6 +89,24 @@ userSchema.methods.generateToken = function(cb){
     next()
 })
     */
+   
+
+    userSchema.statics.findByToken = function(token, cb) {
+        let user = this;
+        //토큰올 복호화한다.
+        jwt.verify(token, 'secretToken', function(err, decoded){
+
+            //유저 아이디를 이용해서 유저를 찾은다음에 
+            //클라이언트에서 가져온 token과 데이터베이스에 보관된 토큰이 일치하는지 확인한다.
+
+            user.findOne({"_id": decoded, "token": token}, function(err, user){
+                if(err) return cb(err)
+                return cb(null, user)
+            })
+
+        })
+    }
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = { User }

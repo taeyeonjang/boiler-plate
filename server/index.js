@@ -4,6 +4,7 @@ const port = 5100
 const { User } = require("./models/User");
 const config = require('./config/key');
 const cookieParser = require('cookie-parser')
+const { auth } = require('./middleware/auth');
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -20,7 +21,7 @@ app.get('/', (req, res) => res.send('hello world223123'))
 
 
 
-app.post('/register', (req, res) =>{
+app.post('/api/users/register', (req, res) =>{
     //회원가입시 입력했던 정보들을 클라이언트에서 가져오면
     //그것들을 Db에 넣어준다
     const user = new User(req.body)
@@ -36,7 +37,7 @@ app.post('/register', (req, res) =>{
 })
 
 
-app.post('/login', (req, res) =>{
+app.post('/api/users/login', (req, res) =>{
 
     //요청된 email을 데이터베이스에 있는지 찾는다,
 
@@ -72,11 +73,29 @@ app.post('/login', (req, res) =>{
             
     })
 
-   
+})
 
-   
+app.get('/api/users/auth', auth , (req, res) =>{
+
+    res.status(200).json({
+        _id: req.user._id, //req.user = user을 해서 가능
+        isAdmin: req.user.role === 0 ? false : true,
+        isAuth: true,
+        email: req.user.email,
+        name: req.user.name,
+        role: req.user.role,
+        image: req.user.image
+    })
+})
 
 
+app.get('/api/users/logout', auth, (req, res) =>{
+    User.findByIdAndUpdate({ _id: req.user._id }, { token: "" },
+    (err, user) =>{
+        if(err) return json({ success: false, err});
+        return res.status(200).send({ success: true
+        })
+    })
 })
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))
