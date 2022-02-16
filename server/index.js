@@ -19,6 +19,9 @@ const mongoose = require('mongoose')
         
 app.get('/', (req, res) => res.send('hello world223123'))
 
+app.get('/api/hello', (req, res) =>{
+    res.send("api/hello요청")
+})
 
 
 app.post('/api/users/register', (req, res) =>{
@@ -52,13 +55,13 @@ app.post('/api/users/login', (req, res) =>{
         }
 
      //요청한 email이 있다면 비밀번호도 확인한다.     
-        
         userInfo.comparePassword(req.body.password, (err, isMatch)=>{
 
             //findOne으로 찾은 userInfo중 id, password 등 은 req.body.로 찾을수잇다
             if(!isMatch)
             return res.json({ loginSuccess: false, message: "비밀번호가 틀렸습니다"})
             
+
              //비밀번호까지 맞다면 토큰을 생성한다.
             userInfo.generateToken((err, user) => {
                 if(err) return res.status(400).send(err);

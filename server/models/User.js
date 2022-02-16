@@ -36,6 +36,7 @@ userSchema.pre('save', function(next){
                      // user는 유저스키마를 나타낸다
     
     if(user.isModified('password')){
+        
         bcrypt.genSalt(saltRounds, function(err, salt){
             if(err) return next(err);
     
