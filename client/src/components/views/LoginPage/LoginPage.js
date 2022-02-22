@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginUser } from  '../../../_actions/user_action';
 import { useNavigate } from 'react-router-dom';
@@ -8,8 +7,13 @@ import Auth from '../../../hoc/auth';
 function LoginPage() {
 
   const dispatch = useDispatch();
+  const rememberMeChecked = localStorage.getItem("rememberMe") ? true : false;
+
   const [Email, setEmail] = useState("")
   const [Password, setPassword] = useState("")
+  const [rememberMe, setRememberMe] = useState(rememberMeChecked)
+  const [formErrorMessage, setFormErrorMessage] = useState('')
+
   let navigate = useNavigate();
 
 
@@ -35,11 +39,17 @@ function LoginPage() {
   }
 //dispatch에 login user는 user action.js 에 함수명이네
   dispatch(loginUser(body))
-  .then(response =>{
-    if(response.payload.loginSuccess){
-      navigate('/')
-    }else{
-      alert(response.payload.message)
+  .then(response => {
+    if (response.payload.loginSuccess) {
+      window.localStorage.setItem('userId', response.payload.userId);
+      if (rememberMe === true) {
+        window.localStorage.setItem('rememberMe', e.id);
+      } else {
+        localStorage.removeItem('rememberMe');
+      }
+      navigate("/");
+    } else {
+      setFormErrorMessage('Check out your Account or Password again')
     }
   })
   }
