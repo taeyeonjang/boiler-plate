@@ -2,12 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const favoriteSchema = mongoose.Schema({
 
-    useFrom:{
+    userFrom:{
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
     movieId: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     movieTitle: {
         type: String

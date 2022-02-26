@@ -10,11 +10,10 @@ import Favorite from './Section/Favorite';
 function MovieDetail() {
   
   let {movieId} = useParams()
-
+  
     const [Movie, setMovie] = useState([])
     const [Casts, setCasts] = useState([])
     const [ViewToggle, setViewToggle] = useState(false)
-
 
     const actorViewToggle = () => {
       setViewToggle(!ViewToggle)

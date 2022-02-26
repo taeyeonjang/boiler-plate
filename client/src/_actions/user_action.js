@@ -7,7 +7,7 @@ import {
 
 export function loginUser(dataTosubmit){
 
-  const request = axios.post('/api/users/login', dataTosubmit)
+  const request = axios.post('api/users/login', dataTosubmit)
   //서버에 요청
   .then(response =>response.data) 
   return {
@@ -30,7 +30,7 @@ export function registerUser(dataToSubmit){
 }
 
 export function auth(){
-  const request = axios.get('api/users/auth')
+  const request = axios.get('/api/users/auth')
   .then(response => response.data)
 
   return{
